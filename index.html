@@ -1,35 +1,858 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Download PDF</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 100px;
-      background-color: #f5f7fa;
-    }
-    .download-btn {
-      background-color: #ff5722;
-      color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .download-btn:hover {
-      background-color: #e64a19;
-    }
-  </style>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering Mastery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #8060d4 0%, #003366 100%);
+            min-height: 100vh;
+            color: #212121;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 8px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .tab-button:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #8060d4;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .framework-card {
+            background: linear-gradient(135deg, #ff7043 0%, #ff7043 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .framework-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .framework-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .framework-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .framework-example {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .sample-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .sample-card {
+            background: linear-gradient(135deg, #8060d4 0%, #003366 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .sample-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .sample-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .sample-prompt {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .prompt-builder {
+            background: #f5f7fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #212121;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #8060d4;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #8060d4 0%, #003366 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff7043 0%, #ff7043 100%);
+        }
+
+        .saved-prompts {
+            margin-top: 40px;
+        }
+
+        .saved-prompt-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .saved-prompt-item:hover {
+            border-color: #8060d4;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .saved-prompt-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #212121;
+        }
+
+        .saved-prompt-text {
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .prompt-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #212121;
+            text-align: center;
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #212121;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .cta-section {
+            background: #f5f7fa;
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .cta-section h3 {
+            color: #212121;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .cta-section p {
+            color: #212121;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .email-input {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.8);
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .cta-button {
+            background: #ff7043;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .initial-message {
+            text-align: center;
+            color: #212121;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .framework-grid,
+            .sample-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                min-width: auto;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Download Your PDF Guide</h1>
-</br><br>
-  <a class="download-btn" href="https://drive.google.com/uc?export=download&id=1ZarIwbjnrgsSe7-9f_34bnSgnPJP7-Db" target="_blank" download>
-    Download PDF
-  </a>
+    <div class="container">
+        <header>
+            <h1>🎯 Prompt Engineering Mastery</h1>
+            <p class="subtitle">Master the art of crafting effective AI prompts</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('frameworks')">📋 Frameworks</button>
+            <button class="tab-button" onclick="showTab('samples')">💡 Sample Prompts</button>
+            <button class="tab-button" onclick="showTab('builder')">🛠️ Prompt Builder</button>
+        </nav>
+
+        <div id="frameworks" class="tab-content active">
+            <h2 class="section-title">Prompt Engineering Frameworks</h2>
+            <p class="intro-text">Learn proven frameworks that help structure effective prompts for consistent, high-quality AI responses.</p>
+            
+            <div class="framework-grid">
+                <div class="framework-card">
+                    <div class="framework-title">CLEAR Framework</div>
+                    <div class="framework-description">
+                        <strong>C</strong>ontext - <strong>L</strong>ength - <strong>E</strong>xamples - <strong>A</strong>udience - <strong>R</strong>ole
+                        <br><br>
+                        Provides comprehensive structure for any prompt by defining context, setting expectations, providing examples, specifying audience, and assigning roles.
+                    </div>
+                    <div class="framework-example">
+                        Context: I'm preparing a presentation for executives
+                        Length: Keep responses under 200 words
+                        Examples: Like "Our Q3 revenue increased 15%"
+                        Audience: C-suite executives
+                        Role: Act as a business analyst
+                    </div>
+                </div>
+
+                <div class="framework-card">
+                    <div class="framework-title">STAR Method</div>
+                    <div class="framework-description">
+                        <strong>S</strong>ituation - <strong>T</strong>ask - <strong>A</strong>ction - <strong>R</strong>esult
+                        <br><br>
+                        Perfect for prompts requiring structured problem-solving or when you need step-by-step guidance through complex scenarios.
+                    </div>
+                    <div class="framework-example">
+                        Situation: Our website traffic dropped 30%
+                        Task: Identify the root cause
+                        Action: Analyze recent changes and metrics
+                        Result: Provide actionable recommendations
+                    </div>
+                </div>
+
+                <div class="framework-card">
+                    <div class="framework-title">RTF Framework</div>
+                    <div class="framework-description">
+                        <strong>R</strong>ole - <strong>T</strong>ask - <strong>F</strong>ormat
+                        <br><br>
+                        Simple yet powerful framework that clearly defines who the AI should be, what it should do, and how it should present the information.
+                    </div>
+                    <div class="framework-example">
+                        Role: You are a marketing expert
+                        Task: Create a social media strategy
+                        Format: Provide a bulleted action plan
+                    </div>
+                </div>
+
+                <div class="framework-card">
+                    <div class="framework-title">PREP Method</div>
+                    <div class="framework-description">
+                        <strong>P</strong>oint - <strong>R</strong>eason - <strong>E</strong>xample - <strong>P</strong>oint
+                        <br><br>
+                        Excellent for persuasive content, arguments, or when you need well-reasoned responses with supporting evidence.
+                    </div>
+                    <div class="framework-example">
+                        Point: Remote work increases productivity
+                        Reason: Eliminates commute stress and distractions
+                        Example: Studies show 13% productivity increase
+                        Point: Therefore, we should adopt remote work
+                    </div>
+                </div>
+
+                <div class="framework-card">
+                    <div class="framework-title">Chain of Thought</div>
+                    <div class="framework-description">
+                        Encourages step-by-step reasoning by asking the AI to "think through" problems systematically before providing final answers.
+                    </div>
+                    <div class="framework-example">
+                        Let's think step by step:
+                        1. First, analyze the problem
+                        2. Consider possible solutions
+                        3. Evaluate pros and cons
+                        4. Recommend the best approach
+                    </div>
+                </div>
+
+                <div class="framework-card">
+                    <div class="framework-title">Few-Shot Learning</div>
+                    <div class="framework-description">
+                        Provides multiple examples of the desired input-output pattern to help the AI understand exactly what you want.
+                    </div>
+                    <div class="framework-example">
+                        Example 1: "Happy" → "Joyful, content, cheerful"
+                        Example 2: "Angry" → "Furious, irritated, upset"
+                        Example 3: "Confused" → "Puzzled, bewildered, uncertain"
+                        Now do: "Excited" → ?
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cta-section">
+            <h3>🎁 Get Your Free PDF Guide</h3>
+            <p>Want access to all 8 popular prompt engineering frameworks in one convenient PDF? Enter your email below and we'll send it to you instantly!</p>
+            <form action="https://formspree.io/f/xeogblee" method="POST" class="email-form">
+                <input type="email" name="email" class="email-input" placeholder="Enter your email address" required>
+                <button type="submit" class="cta-button">Get Free PDF Guide</button>
+            </form>
+        </div>
+
+        <div id="samples" class="tab-content">
+            <h2 class="section-title">Sample Prompts Library</h2>
+            <p class="intro-text">Explore tested prompts across different categories. Click copy to use them as starting points for your own prompts.</p>
+            
+            <div class="sample-grid">
+                <div class="sample-card">
+                    <div class="sample-title">📝 Content Creation</div>
+                    <div class="sample-prompt">You are an expert content strategist. Create a compelling blog post outline about [TOPIC] for [TARGET AUDIENCE]. The outline should include:
+- An attention-grabbing headline
+- 5-7 main sections with subpoints
+- SEO keywords to target
+- A clear call-to-action
+
+Make it engaging and actionable.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+                </div>
+
+                <div class="sample-card">
+                    <div class="sample-title">🔍 Data Analysis</div>
+                    <div class="sample-prompt">Act as a data analyst. I'll provide you with a dataset about [TOPIC]. Please:
+
+1. Summarize the key findings
+2. Identify 3 most significant trends
+3. Highlight any anomalies or outliers
+4. Suggest actionable insights
+5. Recommend next steps for investigation
+
+Present your analysis in a clear, executive-friendly format.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+                </div>
+
+                <div class="sample-card">
+                    <div class="sample-title">💡 Problem Solving</div>
+                    <div class="sample-prompt">You are a strategic consultant. Help me solve this problem: [DESCRIBE PROBLEM]
+
+Use this approach:
+1. Reframe the problem clearly
+2. Identify root causes (use 5 Whys if helpful)
+3. Generate 3-5 potential solutions
+4. Evaluate each solution's pros/cons
+5. Recommend the best path forward with implementation steps
+
+Be practical and consider resource constraints.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+                </div>
+
+                <div class="sample-card">
+                    <div class="sample-title">🎨 Creative Writing</div>
+                    <div class="sample-prompt">You are a creative storyteller. Write a [LENGTH] story about [THEME/TOPIC] that:
+
+- Includes vivid, sensory descriptions
+- Has a compelling character arc
+- Uses dialogue to reveal personality
+- Incorporates the theme of [SPECIFIC THEME]
+- Ends with a satisfying resolution
+
+Target audience: [AGE GROUP/DEMOGRAPHIC]
+Tone: [TONE - e.g., humorous, dramatic, mysterious]</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+                </div>
+
+                <div class="sample-card">
+                    <div class="sample-title">📧 Email Writing</div>
+                    <div class="sample-prompt">Compose a professional email with the following details:
+
+Purpose: [PURPOSE]
+Recipient: [RECIPIENT ROLE/RELATIONSHIP]
+Key points to cover: [LIST MAIN POINTS]
+Desired outcome: [WHAT YOU WANT TO HAPPEN]
+Tone: [FORMAL/FRIENDLY/PERSUASIVE]
+
+Make it concise, clear, and actionable. Include an appropriate subject line.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+                </div>
+
+                <div class="sample-card">
+                    <div class="sample-title">🏫 Educational Content</div>
+                    <div class="sample-prompt">You are an expert educator. Create a lesson plan for teaching [TOPIC] to [STUDENT LEVEL]. Include:
+
+- Learning objectives (3-5 specific goals)
+- Key concepts to cover
+- Interactive activities or exercises
+- Real-world examples
+- Assessment methods
+- Additional resources for further learning
+
+Make it engaging and appropriate for the audience level.</div>
+                    <button class="copy-btn" onclick="copyPrompt(this)">Copy Prompt</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="builder" class="tab-content">
+            <h2 class="section-title">Personal Prompt Builder</h2>
+            <p class="intro-text">Create, test, and save your own prompts. Build your personal library of effective prompts.</p>
+            
+            <div class="prompt-builder">
+                <form id="promptForm">
+                    <div class="form-group">
+                        <label for="promptTitle">Prompt Title</label>
+                        <input type="text" id="promptTitle" placeholder="Give your prompt a memorable name...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promptCategory">Category</label>
+                        <select id="promptCategory">
+                            <option value="">Select a category...</option>
+                            <option value="content">Content Creation</option>
+                            <option value="analysis">Data Analysis</option>
+                            <option value="problem-solving">Problem Solving</option>
+                            <option value="creative">Creative Writing</option>
+                            <option value="business">Business Communication</option>
+                            <option value="education">Educational</option>
+                            <option value="technical">Technical</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promptFramework">Framework (Optional)</label>
+                        <select id="promptFramework">
+                            <option value="">Select a framework...</option>
+                            <option value="clear">CLEAR Framework</option>
+                            <option value="star">STAR Method</option>
+                            <option value="rtf">RTF Framework</option>
+                            <option value="prep">PREP Method</option>
+                            <option value="chain">Chain of Thought</option>
+                            <option value="few-shot">Few-Shot Learning</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promptText">Your Prompt</label>
+                        <textarea id="promptText" placeholder="Write your prompt here... Be specific about what you want the AI to do, how to format the response, and any constraints or requirements."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="promptNotes">Notes (Optional)</label>
+                        <textarea id="promptNotes" style="min-height: 80px;" placeholder="Add notes about when to use this prompt, what works well, or variations to try..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">💾 Save Prompt</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()">🗑️ Clear Form</button>
+                </form>
+            </div>
+
+            <div class="saved-prompts">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: #212121;">📚 Your Saved Prompts</h3>
+                <div id="savedPromptsList">
+                    <p style="text-align: center; color: #212121; font-style: italic;">No saved prompts yet. Create your first prompt above!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab and mark button as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Copy prompt functionality
+        function copyPrompt(button) {
+            const promptText = button.previousElementSibling.textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✅ Copied!';
+                button.style.background = 'rgba(0, 255, 0, 0.3)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'rgba(255,255,255,0.3)';
+                }, 2000);
+            });
+        }
+
+        // Prompt builder functionality
+        let savedPrompts = JSON.parse(localStorage.getItem('savedPrompts') || '[]');
+
+        document.getElementById('promptForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            savePrompt();
+        });
+
+        function savePrompt() {
+            const title = document.getElementById('promptTitle').value.trim();
+            const category = document.getElementById('promptCategory').value;
+            const framework = document.getElementById('promptFramework').value;
+            const text = document.getElementById('promptText').value.trim();
+            const notes = document.getElementById('promptNotes').value.trim();
+
+            if (!title || !text) {
+                alert('Please fill in at least the title and prompt text.');
+                return;
+            }
+
+            const newPrompt = {
+                id: Date.now(),
+                title,
+                category,
+                framework,
+                text,
+                notes,
+                createdAt: new Date().toLocaleDateString()
+            };
+
+            savedPrompts.unshift(newPrompt);
+            localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
+            
+            displaySavedPrompts();
+            clearForm();
+            
+            // Show success message
+            const submitBtn = document.querySelector('#promptForm button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '✅ Saved!';
+            submitBtn.style.background = 'linear-gradient(135deg, #00b894 0%, #00a085 100%)';
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = 'linear-gradient(135deg, #8060d4 0%, #003366 100%)';
+            }, 2000);
+        }
+
+        function clearForm() {
+            document.getElementById('promptForm').reset();
+        }
+
+        function displaySavedPrompts() {
+            const container = document.getElementById('savedPromptsList');
+            
+            if (savedPrompts.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #212121; font-style: italic;">No saved prompts yet. Create your first prompt above!</p>';
+                return;
+            }
+
+            container.innerHTML = savedPrompts.map(prompt => `
+                <div class="saved-prompt-item">
+                    <div class="saved-prompt-title">${prompt.title}</div>
+                    ${prompt.category ? `<div style="color: #8060d4; font-size: 0.9rem; margin-bottom: 8px;">📁 ${prompt.category.charAt(0).toUpperCase() + prompt.category.slice(1)}</div>` : ''}
+                    ${prompt.framework ? `<div style="color: #ff7043; font-size: 0.9rem; margin-bottom: 8px;">🎯 ${getFrameworkName(prompt.framework)}</div>` : ''}
+                    <div class="saved-prompt-text">${prompt.text}</div>
+                    ${prompt.notes ? `<div style="color: #212121; font-size: 0.9rem; margin-bottom: 15px;"><strong>Notes:</strong> ${prompt.notes}</div>` : ''}
+                    <div style="color: #212121; font-size: 0.8rem; margin-bottom: 15px;">Created: ${prompt.createdAt}</div>
+                    <div class="prompt-actions">
+                        <button class="btn btn-small" onclick="copyPrompt(this)" data-text="${prompt.text}">📋 Copy</button>
+                        <button class="btn btn-small btn-secondary" onclick="editPrompt(${prompt.id})">✏️ Edit</button>
+                        <button class="btn btn-small btn-danger" onclick="deletePrompt(${prompt.id})">🗑️ Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getFrameworkName(framework) {
+            const names = {
+                'clear': 'CLEAR Framework',
+                'star': 'STAR Method',
+                'rtf': 'RTF Framework',
+                'prep': 'PREP Method',
+                'chain': 'Chain of Thought',
+                'few-shot': 'Few-Shot Learning'
+            };
+            return names[framework] || framework;
+        }
+
+        function deletePrompt(id) {
+            if (confirm('Are you sure you want to delete this prompt?')) {
+                savedPrompts = savedPrompts.filter(prompt => prompt.id !== id);
+                localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
+                displaySavedPrompts();
+            }
+        }
+
+        function editPrompt(id) {
+            const prompt = savedPrompts.find(p => p.id === id);
+            if (prompt) {
+                document.getElementById('promptTitle').value = prompt.title;
+                document.getElementById('promptCategory').value = prompt.category || '';
+                document.getElementById('promptFramework').value = prompt.framework || '';
+                document.getElementById('promptText').value = prompt.text;
+                document.getElementById('promptNotes').value = prompt.notes || '';
+                
+                // Temporarily remove the prompt from the list (without confirmation)
+                savedPrompts = savedPrompts.filter(p => p.id !== id);
+                localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
+                displaySavedPrompts();
+
+                // Remove the original prompt so it doesn't duplicate when saving
+                // deletePrompt(id);
+                
+                // Scroll to form
+                document.querySelector('.prompt-builder').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Enhanced copy function for saved prompts
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('.btn[onclick*="copyPrompt"]') && e.target.hasAttribute('data-text')) {
+                e.preventDefault();
+                const text = e.target.getAttribute('data-text');
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = e.target.textContent;
+                    e.target.textContent = '✅ Copied!';
+                    e.target.style.background = 'linear-gradient(135deg, #00b894 0%, #00a085 100%)';
+                    
+                    setTimeout(() => {
+                        e.target.textContent = originalText;
+                        e.target.style.background = 'linear-gradient(135deg, #8060d4 0%, #003366 100%)';
+                    }, 2000);
+                });
+            }
+        });
+
+        // Initialize
+        displaySavedPrompts();
+    </script>
 </body>
 </html>
